@@ -1,0 +1,17 @@
+services:
+  postgresql:
+    image: postgres
+    container_name: ogl
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=eugune
+      - POSTGRES_PASSWORD=2101
+      - POSTGRES_DB=finance
+    restart: always
+
+  redis:
+    image: redis:alpine3.14
+    container_name: redis-oogl
+    ports:
+      - "6379:6379"
