@@ -5,9 +5,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=eugune
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=2101
-      - POSTGRES_DB=finance
+      - POSTGRES_DB=postgres
     restart: always
 
   redis:
