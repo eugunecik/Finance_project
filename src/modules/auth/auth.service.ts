@@ -6,6 +6,7 @@ import { UserLoginDto } from './dto';
 import * as bcrypt from "bcrypt";
 import { AuthUserResponse } from './response';
 import { TokenService } from 'src/token/token.service';
+import { promises } from 'dns';
 
 @Injectable()
 export class AuthService {
@@ -33,4 +34,5 @@ export class AuthService {
         const user = await this.userService.publicUser(dto.email);
         return { ...user, token } as AuthUserResponse; 
     }
-}
+   
+    }

@@ -18,9 +18,6 @@ async findUserByEmail(email:string){
 return this.UserRepository.findOne({where:{email}});
 }
 async createUser(dto: CreateUserDto):Promise<CreateUserDto>{
-
-
-
 dto.password=await this.hashPassword(dto.password)
 await this.UserRepository.create({
     firstName:dto.firstName,
@@ -34,9 +31,7 @@ async publicUser(email:string)
 {return this.UserRepository.findOne({
     where: {email},
     attributes:{exclude :['password']}
-
 })
-
 }
 async updateUser(email: string,dto: UpdateUserDto): Promise<UpdateUserDto>{
 await this.UserRepository.update(dto,{where:{email}})
@@ -48,7 +43,6 @@ async deleteUser(email: string){
     return true;
 
 }
-
 }
 
 

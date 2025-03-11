@@ -23,9 +23,7 @@ constructor(private readonly authService:AuthService){}
     login(@Body() dto:UserLoginDto):Promise<AuthUserResponse>{
       return this.authService.loginUsers(dto)
     }
-    @UseGuards(JwtAuthGuard)
-    @Post('test')
-    test(){return true;}
+    
 
   
 }
