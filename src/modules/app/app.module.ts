@@ -8,6 +8,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from '../users/models/user.model';
 import { AuthModule } from '../auth/auth.module';
 import { TokenModule } from 'src/token/token.module';
+import { ReceiptsModule } from '../receipts/receipts.module';
+import { Receipt } from '../receipts/models/receipt.model';
+import { ExpenseItemsModule } from '../expense-items/expense-items.module'; 
+import { ExpenseItem } from '../expense-items/models/expense-item.model'; 
+
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal: true,
@@ -25,10 +30,10 @@ import { TokenModule } from 'src/token/token.module';
       database: configService.get("db_name"),
       synchronize: true,
       autoLoadModels: true,
-      models: [User] 
+      models: [User, Receipt, ExpenseItem]
     })
   }),
-  UsersModule,AuthModule,TokenModule],
+  UsersModule, AuthModule, TokenModule, ReceiptsModule, ExpenseItemsModule], 
   controllers: [AppController],
   providers: [AppService],
 })
