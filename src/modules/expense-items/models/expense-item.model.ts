@@ -1,7 +1,6 @@
 import { Column, Model, Table, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
 import { Receipt } from '../../receipts/models/receipt.model';
-//import { Category } from '../../categories/models/category.model';
-
+import{Category} from '../../categories/models/category.model'
 @Table
 export class ExpenseItem extends Model {
   @Column
@@ -17,10 +16,10 @@ export class ExpenseItem extends Model {
   @BelongsTo(() => Receipt)
   receipt: Receipt;
 
-  //@ForeignKey(() => Category)
-  //@Column
-  //categoryId: number;
+  @ForeignKey(() => Category)
+  @Column
+  categoryId: number;
 
- // @BelongsTo(() => Category)
-  //category: Category;
+  @BelongsTo(() => Category)
+  category: Category;
 }
