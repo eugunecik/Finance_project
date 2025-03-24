@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsString, IsNumber, IsDateString, IsOptional } from "class-validator"
+import { IsString, IsNumber, IsDateString, IsOptional,IsUrl } from "class-validator"
 
 export class CreateReceiptDTO {
   @ApiProperty()
@@ -39,4 +39,12 @@ export class UpdateReceiptDTO {
   @IsOptional()
  
   imageUrl?: string;
+}
+
+
+export class CreateReceiptFromImageDTO {
+
+  @IsString()
+
+  imageUrl: string;
 }

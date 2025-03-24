@@ -6,5 +6,6 @@ export const AppError = {
   NOT_FOUND_EXPENSE_ITEM: "Expense item not found or does not belong to this user",
   NOT_FOUND_CATEGORY: "Category not found",
   NO_ACCESS: "You don't have access to this resource",
-  NOT_FOUND_PHOTO:'Photo not found'
+  NOT_FOUND_PHOTO:'Photo not found',
+  WRONG_PASSWORD:'Wrong Password'
 };
