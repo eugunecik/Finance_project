@@ -19,6 +19,7 @@ import { Photo } from '../photos/models/photo.model';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { SearchesModule } from '../search/search.module';
 import { join } from 'path';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { join } from 'path';
     ExpenseItemsModule, 
     CategoriesModule,
     PhotosModule,
-    SearchesModule
+    SearchesModule,
+    AnalyticsModule
   ], 
   controllers: [AppController],
   providers: [AppService],

@@ -43,32 +43,7 @@ async deleteUser(email: string){
     return true;
 
 }
-async updatePassword(email: string, currentPassword: string, newPassword: string): Promise<boolean> {
-    
-    const user = await this.UserRepository.findOne({ where: { email } });
-    
-    if (!user) {
-        throw new BadRequestException(AppError.USER_NOT_EXIST);
-    }
-    
-    
-    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
-    
-    if (!isPasswordValid) {
-        throw new BadRequestException(AppError.WRONG_PASSWORD);
-    }
-    
-    
-    const hashedNewPassword = await this.hashPassword(newPassword);
-    
-    
-    await this.UserRepository.update(
-        { password: hashedNewPassword },
-        { where: { email } }
-    );
-    
-    return true;
-}
+
 }
 
 

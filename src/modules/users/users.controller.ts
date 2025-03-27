@@ -1,6 +1,6 @@
 import { Body, Controller,Delete,Get, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto,UpdatePasswordDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import path from 'path';
 import { JwtAuthGuard } from 'src/guards/jwt-guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -20,13 +20,8 @@ updateUser(@Body()updateDto:UpdateUserDto, @Req() request ): Promise<UpdateUserD
     return this.usersService.updateUser(user.email,updateDto)
 }
 @ApiTags("API")
-@ApiResponse({ status: 200, description: 'Password updated successfully' })
-@ApiResponse({ status: 400, description: 'Bad request - invalid credentials' })
-@Post('update-password')
-async updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
-    const { email, currentPassword, newPassword } = updatePasswordDto;
-    return this.usersService.updatePassword(email, currentPassword, newPassword);
-}
+
+
 @UseGuards(JwtAuthGuard)
 @Delete()
 async deleteUser(@Req() request ){

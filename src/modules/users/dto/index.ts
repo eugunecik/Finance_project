@@ -1,44 +1,41 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsString,MinLength } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MinLength } from 'class-validator';
 
-export class CreateUserDto{
-    @ApiProperty()
-    @IsString()
-    firstName:string
-    @ApiProperty()
-    @IsString()
-    username:string
-    @ApiProperty()
-    @IsString()
-    email:string
-    @ApiProperty()
-    @IsString()
-    password:string
+
+export class CreateUserDto {
+  @ApiProperty()
+  @IsString()
+  firstName: string;
+
+  @ApiProperty()
+  @IsString()
+  username: string;
+
+  @ApiProperty()
+  @IsString()
+  email: string;
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(6) 
+  password: string;
 }
 
 
-export class UpdatePasswordDto {
-    @ApiProperty({ description: 'User email for identification' })
+export class UpdateUserDto {
+    @ApiProperty({ required: false })
     @IsString()
-    email: string;
-
-    @ApiProperty({ description: 'Current password for verification' })
+    firstName?: string;
+  
+    @ApiProperty({ required: false })
     @IsString()
-    currentPassword: string;
-
-    @ApiProperty({ description: 'New password to set', minimum: 6 })
+    username?: string;
+  
+    @ApiProperty({ required: false })
+    @IsString()
+    email?: string;
+  
+    @ApiProperty({ required: false })
     @IsString()
     @MinLength(6)
-    newPassword: string;
-}
-export class UpdateUserDto{
-    @ApiProperty()
-    @IsString()
-    firstName:string
-    @ApiProperty()
-    @IsString()
-    username:string
-    @ApiProperty()
-    @IsString()
-    email:string
-}
+    password?: string; }
