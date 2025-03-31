@@ -1,43 +1,67 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from '../users/dto';
-import { UserLoginDto } from './dto';
-import { AuthUserResponse } from './response';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/guards/jwt-guard';
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+} from "@nestjs/swagger";
+import { AuthService } from "./auth.service";
+import { CreateUserDto } from "../users/dto";
+import { UserLoginDto } from "./dto";
+import { AuthUserResponse } from "./response";
+import { JwtAuthGuard } from "src/guards/jwt-guard";
 
-@Controller('auth')
+@ApiTags("API")
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @ApiTags('API')
-  @ApiResponse({ status: 201, type: CreateUserDto })
-  @Post('register')
+  @Post("register")
+  @ApiOperation({ summary: "Register a new user" })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, description: "User registered successfully", type: CreateUserDto })
+  @ApiResponse({ status: 400, description: "Bad Request - Invalid data" })
   register(@Body() dto: CreateUserDto): Promise<CreateUserDto> {
     return this.authService.registerUsers(dto);
   }
 
-  @ApiTags('API')
-  @ApiResponse({ status: 200, type: AuthUserResponse })
-  @Post('login')
+  @Post("login")
+  @ApiOperation({ summary: "Log in a user" })
+  @ApiBody({ type: UserLoginDto })
+  @ApiResponse({ status: 200, description: "User logged in successfully", type: AuthUserResponse })
+  @ApiResponse({ status: 401, description: "Unauthorized - Invalid credentials" })
   login(@Body() dto: UserLoginDto): Promise<AuthUserResponse> {
     return this.authService.loginUsers(dto);
   }
 
-  @ApiTags('API')
-  @ApiResponse({ status: 200, description: 'Password reset email sent' })
-  @Post('password-reset-request')
-  async requestPasswordReset(@Body('email') email: string): Promise<void> {
+  @Post("password-reset-request")
+  @ApiOperation({ summary: "Request a password reset code" })
+  @ApiBody({ schema: { type: "object", properties: { email: { type: "string", example: "user@example.com" } } } })
+  @ApiResponse({ status: 200, description: "Password reset code sent" })
+  @ApiResponse({ status: 400, description: "Bad Request - Invalid email" })
+  requestPasswordReset(@Body("email") email: string): Promise<void> {
     return this.authService.requestPasswordReset(email);
   }
 
-  @ApiTags('API')
-  @ApiResponse({ status: 200, description: 'Password reset successful' })
-  @Post('reset-password')
-  async resetPassword(
-    @Body('token') token: string,
-    @Body('newPassword') newPassword: string,
+  @Post("reset-password")
+  @ApiOperation({ summary: "Reset user password" })
+  @ApiBody({
+    schema: {
+      type: "object",
+      properties: {
+        email: { type: "string", example: "user@example.com" },
+        resetCode: { type: "string", example: "123456" },
+        newPassword: { type: "string", example: "NewPassword123" },
+      },
+    },
+  })
+  @ApiResponse({ status: 200, description: "Password reset successful" })
+  @ApiResponse({ status: 400, description: "Bad Request - Invalid reset code or data" })
+  resetPassword(
+    @Body("email") email: string,
+    @Body("resetCode") resetCode: string,
+    @Body("newPassword") newPassword: string,
   ): Promise<void> {
-    return this.authService.resetPassword(token, newPassword);
+    return this.authService.resetPassword(email, resetCode, newPassword);
   }
 }

@@ -9,29 +9,53 @@ import { Category } from '../categories/models/category.model';
 export class SearchService {
   constructor(
     @InjectModel(Receipt)
-    private receiptModel: typeof Receipt,
+    private readonly receiptModel: typeof Receipt,
     @InjectModel(ExpenseItem)
-    private expenseItemModel: typeof ExpenseItem,
+    private readonly expenseItemModel: typeof ExpenseItem,
   ) {}
 
-  async searchReceipts(searchTerm: string, userId: number) {
-    if (!searchTerm || searchTerm.trim() === '') {
+  async searchReceipts(searchTerm: string, userId: number): Promise<Receipt[]> {
+    if (!searchTerm?.trim()) {
       return [];
     }
 
     const normalizedTerm = `%${searchTerm.toLowerCase()}%`;
+    const matchingIds = await this.findMatchingReceiptIds(normalizedTerm, userId);
+    
+    if (!matchingIds.length) {
+      return [];
+    }
 
-   
-    const directMatches = await this.receiptModel.findAll({
+    return this.fetchReceiptsWithDetails(matchingIds, userId);
+  }
+
+  private async findMatchingReceiptIds(normalizedTerm: string, userId: number): Promise<number[]> {
+    const [directMatches, expenseItemMatches, categoryMatches] = await Promise.all([
+      this.findDirectMatches(normalizedTerm, userId),
+      this.findExpenseItemMatches(normalizedTerm, userId),
+      this.findCategoryMatches(normalizedTerm, userId),
+    ]);
+
+    const directMatchIds = directMatches.map(match => match.id);
+    const expenseMatchIds = expenseItemMatches.map(match => match.receiptId);
+    const categoryMatchIds = categoryMatches.map(match => match.receiptId);
+    
+
+    return [...new Set([...directMatchIds, ...expenseMatchIds, ...categoryMatchIds])];
+  }
+
+  private async findDirectMatches(normalizedTerm: string, userId: number): Promise<Receipt[]> {
+    return this.receiptModel.findAll({
       where: {
         userId,
         ...this.getCaseInsensitiveCriteria('Receipt.merchantName', normalizedTerm),
       },
       attributes: ['id'],
     });
-    
-  
-    const expenseItemMatches = await this.expenseItemModel.findAll({
+  }
+
+  private async findExpenseItemMatches(normalizedTerm: string, userId: number): Promise<ExpenseItem[]> {
+    return this.expenseItemModel.findAll({
       where: this.getCaseInsensitiveCriteria('ExpenseItem.name', normalizedTerm),
       include: [
         {
@@ -42,9 +66,10 @@ export class SearchService {
       ],
       attributes: ['receiptId'],
     });
-    
- 
-    const categoryMatches = await this.expenseItemModel.findAll({
+  }
+
+  private async findCategoryMatches(normalizedTerm: string, userId: number): Promise<ExpenseItem[]> {
+    return this.expenseItemModel.findAll({
       include: [
         {
           model: Category,
@@ -59,22 +84,12 @@ export class SearchService {
       ],
       attributes: ['receiptId'],
     });
-    
-   
-    const directMatchIds = directMatches.map(match => match.id);
-    const expenseMatchIds = expenseItemMatches.map(match => match.receiptId);
-    const categoryMatchIds = categoryMatches.map(match => match.receiptId);
-    
-    const allMatchingIds = [...new Set([...directMatchIds, ...expenseMatchIds, ...categoryMatchIds])];
-    
-    if (allMatchingIds.length === 0) {
-      return [];
-    }
+  }
 
-
+  private async fetchReceiptsWithDetails(receiptIds: number[], userId: number): Promise<Receipt[]> {
     return this.receiptModel.findAll({
       where: {
-        id: { [Op.in]: allMatchingIds },
+        id: { [Op.in]: receiptIds },
         userId,
       },
       include: [
@@ -91,7 +106,6 @@ export class SearchService {
       ],
     });
   }
-
   
   private getCaseInsensitiveCriteria(fieldName: string, searchValue: string) {
     return {

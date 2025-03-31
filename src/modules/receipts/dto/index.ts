@@ -1,49 +1,81 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsString, IsNumber, IsDateString, IsOptional,IsUrl } from "class-validator"
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDateString, IsNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class CreateReceiptDTO {
-  @ApiProperty()
+  @ApiProperty({
+    description: "Name of the merchant",
+    example: "SuperStore",
+  })
   @IsString()
   merchantName: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Total amount of the receipt",
+    example: 99.99,
+  })
   @IsNumber()
   totalAmount: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Date of purchase",
+    example: "2025-03-31T12:00:00Z",
+  })
   @IsDateString()
   purchaseDate: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "URL of the receipt image",
+    example: "https://example.com/receipt.jpg",
+  })
   @IsString()
+
   imageUrl: string;
 }
+
 export class UpdateReceiptDTO {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: "Name of the merchant",
+    example: "SuperStore",
+    required: false,
+  })
   @IsString()
   @IsOptional()
   merchantName?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: "Total amount of the receipt",
+    example: 99.99,
+    required: false,
+  })
   @IsNumber()
   @IsOptional()
   totalAmount?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: "Date of purchase",
+    example: "2025-03-31T12:00:00Z",
+    required: false,
+  })
   @IsDateString()
   @IsOptional()
   purchaseDate?: Date;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: "URL of the receipt image",
+    example: "https://example.com/receipt.jpg",
+    required: false,
+  })
   @IsString()
-  @IsOptional()
  
+  @IsOptional()
   imageUrl?: string;
 }
 
-
 export class CreateReceiptFromImageDTO {
-
+  @ApiProperty({
+    description: "URL of the image to create a receipt from",
+    example: "https://example.com/receipt.jpg",
+  })
   @IsString()
 
   imageUrl: string;

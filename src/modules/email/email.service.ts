@@ -3,26 +3,34 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private readonly transporter: nodemailer.Transporter;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: process.env.EMAIL_SERVICE || 'gmail',
       auth: {
-        user: 'zenasencuk2@gmail.com',
-        pass: 'tmtf xocq srmo nzoe',    
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
   }
 
-  async sendMail(to: string, subject: string, text: string) {
-    const mailOptions = {
-      from: 'zenasencuk2@gmail.com',
-      to,
-      subject,
-      text,
-    };
+  async sendMail(
+    to: string, 
+    subject: string, 
+    text: string
+  ): Promise<nodemailer.SentMessageInfo> {
+    try {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject,
+        text,
+      };
 
-    return this.transporter.sendMail(mailOptions);
+      return await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
   }
 }

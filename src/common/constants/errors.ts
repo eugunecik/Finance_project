@@ -9,4 +9,5 @@ export const AppError = {
   NOT_FOUND_PHOTO: 'Photo not found',
   WRONG_PASSWORD: 'Wrong password',
   INVALID_TOKEN: 'Invalid or expired token', 
+  NEW_PASSWORD_REQUIRED:'New password is required'
 };
