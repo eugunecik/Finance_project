@@ -1,8 +1,16 @@
 import { Module } from '@nestjs/common';
-import { OpenAIService } from './openai.service';
-
+import { ConfigModule } from '@nestjs/config';
+import { GeminiService } from './openai.service';
+import { CategoriesModule } from '../categories/categories.module';
 @Module({
-  providers: [OpenAIService],
-  exports: [OpenAIService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    CategoriesModule, 
+  ],
+  providers: [GeminiService],
+  exports: [GeminiService],
 })
 export class AIModule {}

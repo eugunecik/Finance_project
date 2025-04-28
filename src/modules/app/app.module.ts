@@ -20,6 +20,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { SearchesModule } from '../search/search.module';
 import { join } from 'path';
 import { AnalyticsModule } from '../analytics/analytics.module';
+import { FamiliesModule } from '../families/families.module';
+import { Family } from '../families/models/family.model';
 
 @Module({
   imports: [
@@ -37,9 +39,9 @@ import { AnalyticsModule } from '../analytics/analytics.module';
         username: configService.get("db_user"),
         password: configService.get("db_password"),
         database: configService.get("db_name"),
-        synchronize: true,
+        synchronize: false,
         autoLoadModels: true,
-        models: [User, Receipt, ExpenseItem, Category, Photo]
+        models: [User, Receipt, ExpenseItem, Category, Photo,Family]
       })
     }),
     ServeStaticModule.forRoot({
@@ -54,7 +56,8 @@ import { AnalyticsModule } from '../analytics/analytics.module';
     CategoriesModule,
     PhotosModule,
     SearchesModule,
-    AnalyticsModule
+    AnalyticsModule,
+    FamiliesModule
   ], 
   controllers: [AppController],
   providers: [AppService],

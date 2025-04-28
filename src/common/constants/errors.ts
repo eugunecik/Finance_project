@@ -8,6 +8,12 @@ export const AppError = {
   NO_ACCESS: 'No access',
   NOT_FOUND_PHOTO: 'Photo not found',
   WRONG_PASSWORD: 'Wrong password',
-  INVALID_TOKEN: 'Invalid or expired token', 
-  NEW_PASSWORD_REQUIRED:'New password is required'
+  INVALID_TOKEN: 'Invalid or expired token',
+  NEW_PASSWORD_REQUIRED: 'New password is required',
+  USER_ALREADY_IN_FAMILY: 'User is already in a family',
+  FAMILY_NOT_FOUND: 'Family not found',
+  FAMILY_NOT_FOUND_OR_NOT_ADMIN: 'Family not found or user is not admin',
+  JOIN_REQUEST_ALREADY_SENT: 'Join request already sent',
+  NO_JOIN_REQUEST: 'No join request found for this user',
+  FAMILY_NOT_FOUND_OR_NOT_MEMBER: 'Family not found or user is not a member',
 };

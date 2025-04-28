@@ -3,7 +3,7 @@ import { CreateReceiptDTO, UpdateReceiptDTO, CreateReceiptFromImageDTO } from '.
 import { Receipt } from './models/receipt.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { AppError } from 'src/common/constants/errors';
-import { OpenAIService } from '../ai/openai.service';
+import {GeminiService } from '../ai/openai.service';
 import { ExpenseItem } from '../expense-items/models/expense-item.model';
 import { Category } from '../categories/models/category.model';
 
@@ -13,7 +13,7 @@ export class ReceiptsService {
       @InjectModel(Receipt) private readonly ReceiptRepository: typeof Receipt,
       @InjectModel(ExpenseItem) private readonly ExpenseItemRepository: typeof ExpenseItem,
       @InjectModel(Category) private readonly CategoryRepository: typeof Category,
-      private readonly openaiService: OpenAIService
+      private readonly openaiService: GeminiService
     ) {}
 
     async createReceipt(dto: CreateReceiptDTO, userId: number): Promise<Receipt> {
